@@ -1,10 +1,23 @@
-name: Ubuntu
+name: Node.js CI
 on:
-  watch:
-    types: started
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
 jobs:
-  Ubuntu:
+  build:
     runs-on: ubuntu-latest
     steps:
-    - name: SSH connection to Actions
-      uses: P3TERX/debugger-action@master
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm run test
+        env:
+          CI: "true"
+      - name: Build project
+        run: npm run build
